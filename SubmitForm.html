@@ -82,7 +82,10 @@
         },
         body: JSON.stringify(data)
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) throw new Error("Failed request");
+        return response.json();
+      })
       .then(() => {
         alert("Request submitted successfully. Your request number is: " + requestNumber);
         document.getElementById("name").value = "";
