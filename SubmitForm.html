@@ -65,22 +65,20 @@
 
       const requestNumber = Math.floor(1000 + Math.random() * 9000);
 
-      const data = {
-        data: {
-          request_number: requestNumber,
-          name: name,
-          country: country,
-          leave_type: leaveType,
-          status: "Pending"
-        }
+      const payload = {
+        request_number: requestNumber,
+        name: name,
+        country: country,
+        leave_type: leaveType,
+        status: "Pending"
       };
 
       fetch(sheetAPI, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: JSON.stringify(data)
+        body: "data=" + encodeURIComponent(JSON.stringify(payload))
       })
       .then(response => {
         if (!response.ok) throw new Error("Failed request");
