@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Submit Request</title>
+  <style>
+    body { font-family: Arial; padding: 20px; text-align: center; }
+    select, input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Submit Leave Request</h2>
+
+  <input type="text" id="name" placeholder="Enter your name"><br>
+
+  <select id="country">
+    <option value="">Select Country</option>
+    <option>Belgium</option>
+    <option>Germany</option>
+    <option>Netherland</option>
+    <option>Sweden</option>
+    <option>UK</option>
+    <option>Manchester</option>
+    <option>Spain</option>
+    <option>Italy</option>
+    <option>Canada</option>
+    <option>US</option>
+    <option>Australia</option>
+    <option>Austria</option>
+  </select><br>
+
+  <select id="leaveType">
+    <option value="">Select Leave Type</option>
+    <option>Sick Leave</option>
+    <option>PTO</option>
+    <option>Unpaid Leave</option>
+    <option>Annual Leave</option>
+  </select><br>
+
+  <button onclick="submitForm()">Submit</button>
+  <button onclick="goBack()">Back to Home</button>
+
+  <script>
+    const sheetAPI = "https://sheetdb.io/api/v1/vstalmyr52rz9";
+
+    function submitForm() {
+      const name = document.getElementById("name").value.trim();
+      const country = document.getElementById("country").value;
+      const leaveType = document.getElementById("leaveType").value;
+
+      if (!name || !country || !leaveType) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const requestNumber = Math.floor(1000 + Math.random() * 9000);
+
+      const data = {
+        data: {
+          request_number: requestNumber,
+          name: name,
+          country: country,
+          leave_type: leaveType,
+          status: "Pending"
+        }
+      };
+
+      fetch(sheetAPI, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(res => {
+        if (res.ok) {
+          alert("Request submitted successfully. Your request number is: " + requestNumber);
+          document.getElementById("name").value = "";
+          document.getElementById("country").value = "";
+          document.getElementById("leaveType").value = "";
+        } else {
+          alert("Error submitting request.");
+        }
+      });
+    }
+
+    function goBack() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>

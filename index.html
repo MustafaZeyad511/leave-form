@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Request Portal</title>
+  <style>
+    body { font-family: Arial; padding: 20px; text-align: center; }
+    input, button { margin: 10px; padding: 10px; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+  <h2>Request Portal</h2>
+
+  <div>
+    <h3>Check Request Status</h3>
+    <input type="text" id="requestNumber" placeholder="Enter Request Number">
+    <button onclick="checkStatus()">Check Status</button>
+    <p id="statusResult"></p>
+  </div>
+
+  <hr>
+
+  <div>
+    <h3>Submit New Request</h3>
+    <button onclick="goToForm()">Submit Request</button>
+  </div>
+
+  <script>
+    const sheetAPI = "https://sheetdb.io/api/v1/vstalmyr52rz9";
+
+    function checkStatus() {
+      const reqNum = document.getElementById("requestNumber").value.trim();
+      if (!reqNum) {
+        document.getElementById("statusResult").innerText = "Please enter a request number.";
+        return;
+      }
+
+      fetch(`${sheetAPI}/search?request_number=${reqNum}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.length > 0) {
+            document.getElementById("statusResult").innerText = "Status: " + data[0].status;
+          } else {
+            document.getElementById("statusResult").innerText = "Request not found.";
+          }
+        });
+    }
+
+    function goToForm() {
+      window.location.href = "SubmitForm.html";
+    }
+  </script>
+
+</body>
+</html>
